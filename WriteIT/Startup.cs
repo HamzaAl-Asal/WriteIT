@@ -45,10 +45,9 @@ namespace WriteIT
             app.UseSpaStaticFiles();
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = Path.Join(env.ContentRootPath, "clientapp");
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.Options.SourcePath = Path.Join(env.ContentRootPath, "clientapp");
                 }
             });
         }
