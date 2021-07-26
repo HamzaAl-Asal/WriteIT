@@ -29,17 +29,22 @@ namespace WriteIT.Controllers
         {
             return await movieService.Get();
         }
-        
-        public async Task<List<MovieViewModel>> Get(int[] ids)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MovieViewModel>> Get(int id)
         {
-            return await movieService.GetByIds(ids);
+            var checkMovieExistence = movieDbSet.FirstOrDefault(e => e.Id == id);
+            if (checkMovieExistence == null)
+                return NotFound();
+
+            return await movieService.Get(id);
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<MovieViewModel>> Post(MovieViewModel model)
         {
-            var checkMovie = movieDbSet.Where(e => e.Id == model.Id).ToList();
-            if (checkMovie.Count() != 0)
+            var checkMovieExistence = movieDbSet.Where(e => e.Id == model.Id).ToList();
+            if (checkMovieExistence.Count() != 0)
                 return BadRequest();
 
             await movieService.Create(model);
@@ -50,8 +55,8 @@ namespace WriteIT.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<MovieViewModel>> Put([FromRoute] int id, MovieViewModel model)
         {
-            var checkMovie = movieDbSet.Where(e => e.Id == id);
-            if (checkMovie.Count() == 0)
+            var checkMovieExistence = movieDbSet.Where(e => e.Id == id);
+            if (checkMovieExistence.Count() == 0)
                 return NotFound();
 
             await movieService.Update(id, model);
@@ -62,9 +67,8 @@ namespace WriteIT.Controllers
         [HttpDelete]
         public async Task<ActionResult<MovieViewModel>> Delete(int[] ids)
         {
-            var getMovies = movieService.GetByIds(ids).Result;
-
-            if (getMovies == null)
+            var checkMovieExistence = await movieService.GetByIds(ids);
+            if (checkMovieExistence == null)
                 return NotFound();
 
             await movieService.Delete(ids);

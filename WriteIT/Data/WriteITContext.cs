@@ -15,10 +15,14 @@ namespace WriteIT.Data
         {
             modelBuilder.Entity<Movie>(e =>
             {
-                e.HasKey(d => d.Id);
                 e.Property(d => d.Name).HasMaxLength(500).IsRequired();
-                e.Property(d => d.Date);
-            });
+                e.Property(d => d.Genre).HasMaxLength(100);
+                e.Property(d => d.BestCharacter).HasMaxLength(200);
+                e.Property(d => d.MyRate).HasDefaultValue(0.0);
+                e.Property(d => d.ReleaseYear).IsRequired();
+            }
+            
+            );
         }
     }
 }

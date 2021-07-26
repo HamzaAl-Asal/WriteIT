@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WriteIT.Abstractions.Models
+﻿namespace WriteIT.Abstractions.Models
 {
-   public class MovieViewModel
+    public class MovieViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime? Date { get; set; }
+        public string BestCharacter { get; set; }
+        public string Genre { get; set; }
+        public double MyRate { get; set; }
+        public int ReleaseYear { get; set; }
+
     }
 }

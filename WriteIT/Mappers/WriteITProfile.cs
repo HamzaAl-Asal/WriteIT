@@ -10,7 +10,7 @@ namespace WriteIT.Mappers
         {
             //Movies 
             CreateMap<Movie, MovieViewModel>();
-            CreateMap<MovieViewModel,Movie>(); 
+            CreateMap<MovieViewModel, Movie>();
         }
     }
 }

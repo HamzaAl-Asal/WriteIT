@@ -28,4 +28,8 @@
     <ProjectReference Include="..\WriteIT.Abstractions\WriteIT.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappers\Resolvers\" />
+  </ItemGroup>
+
 </Project>
