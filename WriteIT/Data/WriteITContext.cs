@@ -6,6 +6,7 @@ namespace WriteIT.Data
     public class WriteITContext : DbContext
     {
         public DbSet<Movie> Movies { get; set; }
+        public DbSet<Series> Series { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -20,9 +21,17 @@ namespace WriteIT.Data
                 e.Property(d => d.BestCharacter).HasMaxLength(200);
                 e.Property(d => d.MyRate).HasDefaultValue(0.0);
                 e.Property(d => d.ReleaseYear).IsRequired();
-            }
-            
-            );
+            });
+
+            modelBuilder.Entity<Series>(e =>
+            {
+                e.Property(d => d.Name).HasMaxLength(500).IsRequired();
+                e.Property(d => d.Genre).HasMaxLength(100);
+                e.Property(d => d.BestCharacter).HasMaxLength(200);
+                e.Property(d => d.MyRate).HasDefaultValue(0.0);
+                e.Property(d => d.ReleaseYear).IsRequired();
+                e.Property(d => d.Season).IsRequired().HasDefaultValue(0);
+            });
         }
     }
 }

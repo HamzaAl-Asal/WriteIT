@@ -8,9 +8,13 @@ namespace WriteIT.Mappers
     {
         public WriteITProfile()
         {
-            //Movies 
+            //Movie 
             CreateMap<Movie, MovieViewModel>();
             CreateMap<MovieViewModel, Movie>();
+
+            //Series
+            CreateMap<Series, SeriesViewModel>();
+            CreateMap<SeriesViewModel, Series>();
         }
     }
 }
