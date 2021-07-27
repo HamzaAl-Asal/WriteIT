@@ -17,6 +17,7 @@ namespace WriteIT
             services.AddAutoMapper(typeof(WriteITProfile));
             services.AddScoped<WriteITContext>();
             services.AddScoped<MovieService>();
+            services.AddScoped<SeriesService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "clientapp/build";
