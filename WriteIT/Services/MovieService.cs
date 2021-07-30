@@ -46,7 +46,6 @@ namespace WriteIT.Services
 
             movie.Name = model.Name;
             movie.MyRate = model.MyRate;
-            movie.Genre = model.Genre;
             movie.BestCharacter = model.BestCharacter;
             movie.ReleaseYear = model.ReleaseYear;
 

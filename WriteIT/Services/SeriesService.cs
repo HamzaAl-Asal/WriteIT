@@ -46,7 +46,6 @@ namespace WriteIT.Services
 
             series.Name = model.Name;
             series.MyRate = model.MyRate;
-            series.Genre = model.Genre;
             series.BestCharacter = model.BestCharacter;
             series.ReleaseYear = model.ReleaseYear;
             series.Season = model.Season;
