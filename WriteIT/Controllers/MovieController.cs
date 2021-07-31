@@ -33,7 +33,7 @@ namespace WriteIT.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieViewModel>> Get(int id)
         {
-            var checkMovieExistence = movieDbSet.FirstOrDefault(e => e.Id == id);
+            var checkMovieExistence = movieDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
             if (checkMovieExistence == null)
                 return NotFound();
 
@@ -43,7 +43,7 @@ namespace WriteIT.Controllers
         [HttpPost]
         public async Task<ActionResult<MovieViewModel>> Post(MovieViewModel model)
         {
-            var checkMovieExistence = movieDbSet.Where(e => e.Id == model.Id).ToList();
+            var checkMovieExistence = movieDbSet.Include(e => e.Genres).Where(e => e.Id == model.Id).ToList();
             if (checkMovieExistence.Count() != 0)
                 return BadRequest();
 
@@ -55,7 +55,7 @@ namespace WriteIT.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<MovieViewModel>> Put([FromRoute] int id, MovieViewModel model)
         {
-            var checkMovieExistence = movieDbSet.Where(e => e.Id == id);
+            var checkMovieExistence = movieDbSet.Include(e => e.Genres).Where(e => e.Id == id);
             if (checkMovieExistence.Count() == 0)
                 return NotFound();
 

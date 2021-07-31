@@ -15,6 +15,10 @@ namespace WriteIT.Mappers
             //Series
             CreateMap<Series, SeriesViewModel>();
             CreateMap<SeriesViewModel, Series>();
+
+            //Genre
+            CreateMap<Genre, GenreViewModel>();
+            CreateMap<GenreViewModel, Genre>();
         }
     }
 }

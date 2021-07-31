@@ -21,17 +21,17 @@ namespace WriteIT.Services
         }
         public async Task<List<MovieViewModel>> Get()
         {
-            var movies = await movieDbSet.ToListAsync();
+            var movies = await movieDbSet.Include(e => e.Genres).ToListAsync();
             return mapper.Map<List<MovieViewModel>>(movies);
         }
         public Task<MovieViewModel> Get(int id)
         {
-            var movie = movieDbSet.FirstOrDefault(e => e.Id == id);
+            var movie = movieDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
             return Task.FromResult(mapper.Map<MovieViewModel>(movie));
         }
         public async Task<List<MovieViewModel>> GetByIds(int[] ids)
         {
-            var movies = await movieDbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+            var movies = await movieDbSet.Include(e => e.Genres).Where(x => ids.Contains(x.Id)).ToListAsync();
             return mapper.Map<List<MovieViewModel>>(movies);
         }
         public Task Create(MovieViewModel model)
@@ -42,7 +42,7 @@ namespace WriteIT.Services
         }
         public Task Update([FromRoute] int id, MovieViewModel model)
         {
-            var movie = movieDbSet.FirstOrDefault(e => e.Id == id);
+            var movie = movieDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
 
             movie.Name = model.Name;
             movie.MyRate = model.MyRate;
@@ -53,7 +53,7 @@ namespace WriteIT.Services
         }
         public Task Delete(int[] ids)
         {
-            var movies = movieDbSet.Where(e => ids.Contains(e.Id)).ToList();
+            var movies = movieDbSet.Include(e => e.Genres).Where(e => ids.Contains(e.Id)).ToList();
             movieDbSet.RemoveRange(movies);
 
             return Task.CompletedTask;

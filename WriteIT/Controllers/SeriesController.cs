@@ -33,7 +33,7 @@ namespace WriteIT.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SeriesViewModel>> Get(int id)
         {
-            var checkSeriesExistence = seriesDbSet.FirstOrDefault(e => e.Id == id);
+            var checkSeriesExistence = seriesDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
             if (checkSeriesExistence == null)
                 return NotFound();
 
@@ -43,7 +43,7 @@ namespace WriteIT.Controllers
         [HttpPost]
         public async Task<ActionResult<SeriesViewModel>> Post(SeriesViewModel model)
         {
-            var checkSeriesExistence = seriesDbSet.Where(e => e.Id == model.Id).ToList();
+            var checkSeriesExistence = seriesDbSet.Include(e => e.Genres).Where(e => e.Id == model.Id).ToList();
             if (checkSeriesExistence.Count() != 0)
                 return BadRequest();
 
@@ -55,7 +55,7 @@ namespace WriteIT.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<SeriesViewModel>> Put([FromRoute] int id, SeriesViewModel model)
         {
-            var checkSeriesExistence = seriesDbSet.Where(e => e.Id == id);
+            var checkSeriesExistence = seriesDbSet.Include(e => e.Genres).Where(e => e.Id == id);
             if (checkSeriesExistence.Count() == 0)
                 return NotFound();
 
