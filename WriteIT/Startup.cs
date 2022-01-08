@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using WriteIT.Data;
+using WriteIT.Interfaces;
 using WriteIT.Mappers;
 using WriteIT.Services;
 
@@ -16,7 +17,7 @@ namespace WriteIT
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(WriteITProfile));
             services.AddScoped<WriteITContext>();
-            services.AddScoped<MovieService>();
+            services.AddScoped<IMovie,MovieService>();
             services.AddScoped<SeriesService>();
             services.AddScoped<GenreService>();
             services.AddSpaStaticFiles(configuration =>

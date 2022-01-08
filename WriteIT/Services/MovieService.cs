@@ -1,62 +1,76 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WriteIT.Abstractions.Models;
 using WriteIT.Data;
 using WriteIT.Data.Models;
+using WriteIT.Interfaces;
 
 namespace WriteIT.Services
 {
-    public class MovieService
+    public class MovieService : IMovie
     {
         private readonly DbSet<Movie> movieDbSet;
         private readonly IMapper mapper;
-        public MovieService(WriteITContext context, IMapper mapper)
+        private readonly WriteITContext dbContext;
+
+        public MovieService(IMapper mapper, WriteITContext dbContext)
         {
-            this.movieDbSet = context.Set<Movie>();
+            this.movieDbSet = dbContext.Set<Movie>();
             this.mapper = mapper;
+            this.dbContext = dbContext;
         }
         public async Task<List<MovieViewModel>> Get()
         {
             var movies = await movieDbSet.Include(e => e.Genres).ToListAsync();
             return mapper.Map<List<MovieViewModel>>(movies);
         }
-        public Task<MovieViewModel> Get(int id)
+        public async Task<MovieViewModel> Get(int id)
         {
-            var movie = movieDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
-            return Task.FromResult(mapper.Map<MovieViewModel>(movie));
+            var movie = await movieDbSet.Include(e => e.Genres).FirstOrDefaultAsync(e => e.Id == id);
+
+            if (movie == null)
+                throw new ArgumentNullException($"This Movie is Not Found in our database !");
+
+            return mapper.Map<MovieViewModel>(movie);
         }
         public async Task<List<MovieViewModel>> GetByIds(int[] ids)
         {
             var movies = await movieDbSet.Include(e => e.Genres).Where(x => ids.Contains(x.Id)).ToListAsync();
             return mapper.Map<List<MovieViewModel>>(movies);
         }
-        public Task Create(MovieViewModel model)
+        public async Task Create(MovieViewModel model)
         {
-            movieDbSet.Add(mapper.Map<Movie>(model));
+            if (model.Id != 0)
+                throw new ArgumentException("Do not enter Id while create proccess !!");
 
-            return Task.CompletedTask;
+            await movieDbSet.AddAsync(mapper.Map<Movie>(model));
+            await dbContext.SaveChangesAsync();
         }
-        public Task Update([FromRoute] int id, MovieViewModel model)
+        public async Task Update([FromRoute] int id, MovieViewModel model)
         {
-            var movie = movieDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
+            var movie = await movieDbSet.Include(e => e.Genres).FirstOrDefaultAsync(e => e.Id == id);
+
+            if (string.IsNullOrEmpty(model.Name))
+                throw new ArgumentNullException("Movie Name Cannot be null !");
 
             movie.Name = model.Name;
             movie.MyRate = model.MyRate;
             movie.BestCharacter = model.BestCharacter;
             movie.ReleaseYear = model.ReleaseYear;
 
-            return Task.CompletedTask;
+            await dbContext.SaveChangesAsync();
         }
-        public Task Delete(int[] ids)
+        public async Task Delete(int[] ids)
         {
-            var movies = movieDbSet.Include(e => e.Genres).Where(e => ids.Contains(e.Id)).ToList();
+            var movies = await movieDbSet.Include(e => e.Genres).Where(e => ids.Contains(e.Id)).ToListAsync();
             movieDbSet.RemoveRange(movies);
 
-            return Task.CompletedTask;
+            await dbContext.SaveChangesAsync();
         }
     }
 }

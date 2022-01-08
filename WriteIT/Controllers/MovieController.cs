@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WriteIT.Abstractions.Models;
-using WriteIT.Data;
-using WriteIT.Data.Models;
-using WriteIT.Services;
+using WriteIT.Interfaces;
 
 namespace WriteIT.Controllers
 {
@@ -14,66 +10,40 @@ namespace WriteIT.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private readonly MovieService movieService;
-        private readonly DbSet<Movie> movieDbSet;
-        private readonly WriteITContext context;
+        private readonly IMovie movie;
 
-        public MovieController(MovieService movieService, WriteITContext context)
+        public MovieController(IMovie movie)
         {
-            this.movieService = movieService;
-            this.movieDbSet = context.Set<Movie>();
-            this.context = context;
+            this.movie = movie;
         }
 
         public async Task<List<MovieViewModel>> Get()
         {
-            return await movieService.Get();
+            return await movie.Get();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieViewModel>> Get(int id)
         {
-            var checkMovieExistence = movieDbSet.Include(e => e.Genres).FirstOrDefault(e => e.Id == id);
-            if (checkMovieExistence == null)
-                return NotFound();
-
-            return await movieService.Get(id);
+            return await movie.Get(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<MovieViewModel>> Post(MovieViewModel model)
+        public async Task Post(MovieViewModel model)
         {
-            var checkMovieExistence = movieDbSet.Include(e => e.Genres).Where(e => e.Id == model.Id).ToList();
-            if (checkMovieExistence.Count() != 0)
-                return BadRequest();
-
-            await movieService.Create(model);
-            await context.SaveChangesAsync();
-            return Ok();
+            await movie.Create(model);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<MovieViewModel>> Put([FromRoute] int id, MovieViewModel model)
+        public async Task Put([FromRoute] int id, MovieViewModel model)
         {
-            var checkMovieExistence = movieDbSet.Include(e => e.Genres).Where(e => e.Id == id);
-            if (checkMovieExistence.Count() == 0)
-                return NotFound();
-
-            await movieService.Update(id, model);
-            await context.SaveChangesAsync();
-            return Ok();
+            await movie.Update(id, model);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<MovieViewModel>> Delete(int[] ids)
+        public async Task Delete(int[] ids)
         {
-            var checkMovieExistence = await movieService.GetByIds(ids);
-            if (checkMovieExistence == null)
-                return NotFound();
-
-            await movieService.Delete(ids);
-            await context.SaveChangesAsync();
-            return Ok();
+            await movie.Delete(ids);
         }
     }
 }
