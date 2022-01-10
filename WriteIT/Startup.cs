@@ -17,7 +17,8 @@ namespace WriteIT
             services.AddControllersWithViews();
             services.AddAutoMapper(typeof(WriteITProfile));
             services.AddScoped<WriteITContext>();
-            services.AddScoped<IMovie,MovieService>();
+            services.AddScoped<IMovie, MovieService>();
+            services.AddScoped<ISeries, SeriesService>();
             services.AddScoped<SeriesService>();
             services.AddScoped<GenreService>();
             services.AddSpaStaticFiles(configuration =>
