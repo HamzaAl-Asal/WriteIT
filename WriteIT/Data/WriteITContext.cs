@@ -8,6 +8,7 @@ namespace WriteIT.Data
     {
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Series> Series { get; set; }
+        public DbSet<Genre> Genre { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder

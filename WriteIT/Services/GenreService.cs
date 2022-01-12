@@ -4,23 +4,23 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WriteIT.Abstractions.Models;
 using WriteIT.Data;
-using WriteIT.Data.Models;
+using WriteIT.Interfaces;
 
 namespace WriteIT.Services
 {
-    public class GenreService
+    public class GenreService : IGenre
     {
         private readonly IMapper mapper;
-        private readonly DbSet<Genre> genreDbSet;
-        public GenreService(IMapper mapper, WriteITContext context)
+        private readonly WriteITContext dbContext;
+        public GenreService(IMapper mapper, WriteITContext dbContext)
         {
             this.mapper = mapper;
-            this.genreDbSet = context.Set<Genre>();
+            this.dbContext = dbContext;
         }
 
         public async Task<List<GenreViewModel>> Get()
         {
-            return mapper.Map<List<GenreViewModel>>(await genreDbSet.ToListAsync());
+             return mapper.Map<List<GenreViewModel>>(await dbContext.Genre.ToListAsync());
         }
     }
 }

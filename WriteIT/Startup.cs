@@ -19,8 +19,7 @@ namespace WriteIT
             services.AddScoped<WriteITContext>();
             services.AddScoped<IMovie, MovieService>();
             services.AddScoped<ISeries, SeriesService>();
-            services.AddScoped<SeriesService>();
-            services.AddScoped<GenreService>();
+            services.AddScoped<IGenre, GenreService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "clientapp/build";

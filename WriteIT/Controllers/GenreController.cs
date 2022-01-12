@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WriteIT.Abstractions.Models;
-using WriteIT.Services;
+using WriteIT.Interfaces;
 
 namespace WriteIT.Controllers
 {
@@ -10,16 +10,16 @@ namespace WriteIT.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly GenreService genreService;
+        private readonly IGenre genre;
 
-        public GenreController(GenreService genreService)
+        public GenreController(IGenre genre)
         {
-            this.genreService = genreService;
+            this.genre = genre;
         }
 
         public async Task<List<GenreViewModel>> Get()
         {
-            return await genreService.Get();
+            return await genre.Get();
         }
     }
 }
