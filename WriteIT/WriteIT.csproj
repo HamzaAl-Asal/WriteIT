@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WriteIT.Abstractions\WriteIT.Abstractions.csproj" />
+    <ProjectReference Include="..\WriteIT.Authentication\WriteIT.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

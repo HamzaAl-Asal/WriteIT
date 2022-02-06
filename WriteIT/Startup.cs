@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using WriteIT.Authentication.Handlers;
 using WriteIT.Data;
 using WriteIT.Interfaces;
 using WriteIT.Mappers;
@@ -20,6 +22,10 @@ namespace WriteIT
             services.AddScoped<IMovie, MovieService>();
             services.AddScoped<ISeries, SeriesService>();
             services.AddScoped<IGenre, GenreService>();
+
+            services.AddAuthentication("BasicAuthentiaction")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentiaction", null);
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "clientapp/build";
@@ -34,6 +40,9 @@ namespace WriteIT
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
