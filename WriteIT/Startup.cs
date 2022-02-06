@@ -23,8 +23,8 @@ namespace WriteIT
             services.AddScoped<ISeries, SeriesService>();
             services.AddScoped<IGenre, GenreService>();
 
-            services.AddAuthentication("BasicAuthentiaction")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentiaction", null);
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
             services.AddSpaStaticFiles(configuration =>
             {
